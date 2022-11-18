@@ -38,7 +38,7 @@ jobs:
         with:
           repository: 'libvips/build-win64-mxe'
           
-      - run: ls -al
+      - run: pwd && ls -al
 
       - id: build-amd64
         name: Build for AMD64
