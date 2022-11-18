@@ -48,10 +48,10 @@ jobs:
 
       - id: build-amd64
         name: Build for AMD64
-        run: sudo ./build.sh --with-hevc all x86_64 shared
+        run: ./build.sh --with-hevc all x86_64 shared
       
       - id: build-armv7
         name: Build for ARMv7
-        run: sudo ./build.sh --with-hevc all armv7 shared
+        run: ./build.sh --with-hevc all armv7 shared
 
       - run: ls -al
