@@ -44,15 +44,10 @@ jobs:
       - id: prepare-volumns
         name: Prepare docker volumns
         run: pwd && mkdir temp && sudo chmod 777 temp && sudo chown runner:runner temp && sudo chmod 777 build && sudo chown runner:runner build && ls -al
-
-        
-      - id: archive
-        name: Archive
-        run: zip libvips.zip -r ./*
         
       - id: upload-artifacts
         name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
           name: libvips
-          path: libvips.zip
+          path: ./*
