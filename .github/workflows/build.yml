@@ -43,14 +43,16 @@ jobs:
           
       - run: cd .. && sudo chmod 777 toybox-vips && sudo chown runner:runner toybox-vips && cd toybox-vips
       
+      - run: mkdir temp && sudo chmod 777 temp
+      
       - run: pwd && ls -al
 
       - id: build-amd64
         name: Build for AMD64
-        run: ./build.sh --ref ${{needs.prepare.outputs.tag}} --with-hevc all x86_64 shared
+        run: ./build.sh --ref ${{needs.prepare.outputs.tag}} --tmp-dir ./temp --with-hevc all x86_64 shared
       
       - id: build-armv7
         name: Build for ARMv7
-        run: ./build.sh --ref ${{needs.prepare.outputs.tag}} --with-hevc all armv7 shared
+        run: ./build.sh --ref ${{needs.prepare.outputs.tag}} --tmp-dir ./temp --with-hevc all armv7 shared
 
       - run: ls -al
