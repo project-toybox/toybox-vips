@@ -32,7 +32,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - run:  cd ~/ && pwd && ls -al
+      - run:  cd ~/ && pwd && cd work && pwd && cd toybox-vips && ls -al && cd toybox-vips && ls -al &&  && ls -al
     
       - id: create-work-directory
         name: Create a work directory
