@@ -44,7 +44,11 @@ jobs:
       - run: cd .. && sudo chmod 777 toybox-vips && cd toybox-vips
       
       - run: mkdir mxe && mkdir usr && sudo chmod 777 mxe && sudo chmod 777 usr
-          
+      
+      - run: $WORK_DIR_ORG = $(pwd) && echo $WORK_DIR_ORG
+      
+      - run: cd /var && cd tmp && mkdir mxe && sudo chmod 777 mxe && cd $WORK_DIR_ORG
+      
       - run: pwd && ls -al
 
       - id: build-amd64
