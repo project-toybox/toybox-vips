@@ -38,6 +38,10 @@ jobs:
         with:
           repository: 'libvips/build-win64-mxe'
 
+      - id: fix-privilege
+        name: Fix privilege
+        run: sudo chown -R ubuntu:ubuntu ubuntu
+
       - id: fix-chmod
         name: Fix chmod
         run: git update-index --chmod=+x ./build.sh
