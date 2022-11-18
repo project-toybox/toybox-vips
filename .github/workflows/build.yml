@@ -38,9 +38,7 @@ jobs:
     
       - id: checkout-libvips
         name: Checkout libvips
-        uses: actions/checkout@v3
-        with:
-          repository: 'libvips/build-win64-mxe'
+        run: git clone https://github.com/libvips/build-win64-mxe
           
       - id: fix-mode
         name: Fix mode of the shell script
