@@ -43,7 +43,9 @@ jobs:
           
       - run: cd .. && sudo chmod 777 toybox-vips && sudo chown runner:runner toybox-vips && cd toybox-vips
       
-      - run: mkdir temp && sudo chmod 777 temp
+      - run: mkdir temp && sudo chmod 777 temp && sudo chown runner:runner temp
+      
+      - run: sudo chmod 777 build && sudo chown runner:runner build
       
       - run: pwd && ls -al
 
