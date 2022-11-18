@@ -1,0 +1,52 @@
+name: Build libvips
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+
+  prepare:
+    name: Prepare to build
+    runs-on: ubuntu-latest
+    steps:
+      # Note: it returns 'release(=version tag)' and 'id(=version ID)'.
+      - id: get-release-info
+        name: Get release information
+        uses: pozetroninc/github-action-get-latest-release@master
+        with:
+          owner: libvips
+          repo: libvips
+          excludes: prerelease, draft
+
+      # Note: it returns 'exists(true or false)'.
+      - id: check-duplicates
+        name: Check duplicates
+        uses: mukunku/tag-exists-action@v1.1.0
+        with:
+          tag: ${{steps.get-release-info.outputs.release}}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - id: checkout-libvips
+        name: Checkout(libvips)
+        uses: actions/checkout@v3
+        with:
+          repository: 'libvips/libvips'
+          path: 'libvips'
+
+      - id: build-amd64
+        name: Build for AMD64
+        run: cd libvips
+        run: ./build.sh --with-hevc all x86_64 shared
+      
+      - id: build-armv7
+        name: Build for ARMv7
+        run: cd libvips
+        run: ./build.sh --with-hevc all armv7 shared
+
+      - run: ls

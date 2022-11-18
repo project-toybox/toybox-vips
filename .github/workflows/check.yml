@@ -1,0 +1,10 @@
+name: Build libvips
+
+on:
+  schedule:
+    # It runs every Monday.
+    # Note: https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule
+    - cron: '0 0 * * 1'
+
+jobs:
+  
