@@ -34,7 +34,7 @@ jobs:
     steps:
       - id: create-work-directory
         name: Create a work directory
-        run: cd ~/ && mkdir workdir && cd workdir
+        run: cd ~/ && mkdir workdir && sudo chmod 777 workdir && cd workdir
     
       - id: checkout-libvips
         name: Checkout libvips
