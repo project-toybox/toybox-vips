@@ -46,4 +46,4 @@ jobs:
         name: Build for ARMv7
         run: sudo ./build.sh --with-hevc all armv7 shared
 
-      - run: ls
+      - run: ls -al
