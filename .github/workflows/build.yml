@@ -40,7 +40,7 @@ jobs:
           
       - id: init-libvips-builder
         name: Initialize repository
-        run: git init && git remote add origin https://github.com/libvips/build-win64-mxe.git
+        run: git init
           
       - run: pwd && ls -al
 
