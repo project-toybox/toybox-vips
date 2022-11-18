@@ -1,4 +1,4 @@
-name: Build libvips
+name: Build
 
 on:
   workflow_call:
@@ -32,7 +32,7 @@ jobs:
   
   build:
     needs: prepare
-    name: Build
+    name: Build libvips
     runs-on: ubuntu-latest
     steps:    
       - id: checkout-libvips-builder
@@ -42,15 +42,17 @@ jobs:
           repository: 'libvips/build-win64-mxe'
           
       - run: cd .. && sudo chmod 777 toybox-vips && cd toybox-vips
+      
+      - run: mkdir mxe && mkdir usr && sudo chmod 777 mxe && sudo chmod 777 usr
           
       - run: pwd && ls -al
 
       - id: build-amd64
         name: Build for AMD64
-        run: sudo ./build.sh --ref ${{needs.prepare.outputs.tag}} --with-hevc all x86_64 shared
+        run: ./build.sh --ref ${{needs.prepare.outputs.tag}} --with-hevc all x86_64 shared
       
       - id: build-armv7
         name: Build for ARMv7
-        run: sudo ./build.sh --ref ${{needs.prepare.outputs.tag}} --with-hevc all armv7 shared
+        run: ./build.sh --ref ${{needs.prepare.outputs.tag}} --with-hevc all armv7 shared
 
       - run: ls -al
