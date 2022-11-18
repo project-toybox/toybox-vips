@@ -26,6 +26,9 @@ jobs:
           tag: ${{steps.get-release-info.outputs.release}}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    outputs:
+      tag: ${{steps.get-release-info.outputs.release}}
+      is-duplicated: ${{steps.check-duplicates.exists}}
   
   build:
     needs: prepare
@@ -46,10 +49,10 @@ jobs:
 
       - id: build-amd64
         name: Build for AMD64
-        run: ./build.sh --ref ${{needs.prepare.steps.get-release-info.outputs.release}} --with-hevc all x86_64 shared
+        run: ./build.sh --ref ${{needs.prepare.outputs.tag}} --with-hevc all x86_64 shared
       
       - id: build-armv7
         name: Build for ARMv7
-        run: ./build.sh --ref ${{steps.get-release-info.outputs.release}} --with-hevc all armv7 shared
+        run: ./build.sh --ref ${{needs.prepare.outputs.tag}} --with-hevc all armv7 shared
 
       - run: ls -al
