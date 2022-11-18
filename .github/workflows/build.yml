@@ -41,9 +41,7 @@ jobs:
         with:
           repository: 'libvips/build-win64-mxe'
           
-      - id: init-libvips-builder
-        name: Initialize repository
-        run: git init
+      - run: cd .. && sudo chmod 777 toybox-vips && cd toybox-vips
           
       - run: pwd && ls -al
 
