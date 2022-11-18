@@ -36,7 +36,7 @@ jobs:
         name: Checkout(libvips)
         uses: actions/checkout@v3
         with:
-          repository: 'libvips/libvips'
+          repository: 'libvips/build-win64-mxe'
 
       - id: build-amd64
         name: Build for AMD64
