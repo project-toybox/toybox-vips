@@ -32,15 +32,17 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
+      - id: create-work-directory
+        name: Create a work directory
+        run: cd ~/
+        run: mkdir workdir
+        run: cd workdir
+    
       - id: checkout-libvips
-        name: Checkout(libvips)
+        name: Checkout libvips
         uses: actions/checkout@v3
         with:
           repository: 'libvips/build-win64-mxe'
-
-      - id: fix-chmod
-        name: Fix chmod
-        run: git update-index --chmod=+x ./build.sh
 
       - id: build-amd64
         name: Build for AMD64
