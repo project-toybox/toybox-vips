@@ -34,9 +34,7 @@ jobs:
     steps:
       - id: create-work-directory
         name: Create a work directory
-        run: cd ~/
-        run: mkdir workdir
-        run: cd workdir
+        run: cd ~/ && mkdir workdir && cd workdir
     
       - id: checkout-libvips
         name: Checkout libvips
