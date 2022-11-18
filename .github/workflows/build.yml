@@ -46,10 +46,10 @@ jobs:
 
       - id: build-amd64
         name: Build for AMD64
-        run: ./build.sh --with-hevc all x86_64 shared
+        run: ./build.sh --ref ${{steps.get-release-info.outputs.release}} --with-hevc all x86_64 shared
       
       - id: build-armv7
         name: Build for ARMv7
-        run: ./build.sh --with-hevc all armv7 shared
+        run: ./build.sh --ref ${{steps.get-release-info.outputs.release}} --with-hevc all armv7 shared
 
       - run: ls -al
