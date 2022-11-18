@@ -36,11 +36,15 @@ jobs:
         name: Create a work directory
         run: cd ~/ && mkdir workdir && sudo chmod 777 workdir && ls -al && cd workdir
     
-      - id: checkout-libvips
-        name: Checkout libvips
+      - id: checkout-libvips-builder
+        name: Checkout libvips builder 
         uses: actions/checkout@v3
         with:
           repository: 'libvips/build-win64-mxe'
+          
+      - id: init-libvips-builder
+        name: Initialize repository
+        run: git init && git remote add origin https://github.com/libvips/build-win64-mxe.git
 
       - id: build-amd64
         name: Build for AMD64
