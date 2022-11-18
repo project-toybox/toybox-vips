@@ -45,9 +45,18 @@ jobs:
         name: Prepare docker volumns
         run: pwd && mkdir temp && sudo chmod 777 temp && sudo chown runner:runner temp && sudo chmod 777 build && sudo chown runner:runner build && ls -al
         
+      - id: build-amd64
+        name: Build for AMD64
+        run: ./build.sh --ref ${{needs.prepare.outputs.tag}} --tmpdir ./temp --with-hevc all x86_64 shared
+      
+      - id: build-armv7
+        name: Build for ARMv7
+        run: ./build.sh --ref ${{needs.prepare.outputs.tag}} --tmpdir ./temp --with-hevc all armv7 shared
+        
       - id: upload-artifacts
         name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: libvips
+          name: libvips-${{needs.prepare.outputs.tag}}
           path: ./*
+
