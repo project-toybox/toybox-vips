@@ -41,11 +41,7 @@ jobs:
         with:
           repository: 'libvips/build-win64-mxe'
           
-      - run: cd .. && sudo chmod 777 toybox-vips && cd toybox-vips
-      
-      - run: export WORK_DIR_ORG=$(pwd) && echo $WORK_DIR_ORG
-      
-      - run: cd / && ls -al && mkdir data && sudo chmod 777 data && cd $WORK_DIR_ORG
+      - run: cd .. && sudo chmod 777 toybox-vips && sudo chown runner:runner toybox-vips && cd toybox-vips
       
       - run: pwd && ls -al
 
