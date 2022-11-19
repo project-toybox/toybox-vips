@@ -50,7 +50,7 @@ jobs:
       
       - id: prepare-volumns
         name: Prepare docker volumns
-        run: pwd && mkdir temp && sudo chmod 777 temp && sudo chown runner:runner temp && sudo chmod 777 build && sudo chown runner:runner build && ls -al
+        run: pwd && mkdir temp && sudo chmod 777 temp && sudo chown runner:runner temp && sudo chmod 777 build && sudo chown runner:runner build && ls -R
         
       - id: check-build-cache
         name: Check build cache
@@ -78,11 +78,11 @@ jobs:
         
       - id: build-amd64
         name: Build for AMD64
-        run: ./build.sh --ref ${{needs.prepare.outputs.tag}} --tmpdir ./temp --with-hevc all x86_64 static && ls -al
+        run: ./build.sh --ref ${{needs.prepare.outputs.tag}} --tmpdir ./temp --with-hevc all x86_64 static && ls -R
       
       - id: build-aarch64
         name: Build for AArch64(ARM64)
-        run: ./build.sh --ref ${{needs.prepare.outputs.tag}} --tmpdir ./temp --with-hevc all aarch64 static && ls -al
+        run: ./build.sh --ref ${{needs.prepare.outputs.tag}} --tmpdir ./temp --with-hevc all aarch64 static && ls -R
         
       - id: change-work-directory
         name: Change work directory
@@ -102,6 +102,13 @@ jobs:
     steps:
       - id: download-artifacts
         name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: libvips-${{needs.prepare.outputs.tag}}-artifacts
+          
+      - id: display-file-structure
+        name: Display file structure
+        run: ls -R
         
       - id: delete-existing-release
         name: Delete the existing release
