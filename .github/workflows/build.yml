@@ -66,9 +66,15 @@ jobs:
           path: ./temp
           key: ${{env.TEMP_CACHE_KEY}}
           
-      - id: check-cache-hits
-        name: Check cache-hits
-        run: echo BUILD-${{steps.check-build-cache.outputs.cache-hit}}, TEMP-${{steps.check-temp-cache.outputs.cache-hit}}
+      - id: check-build-cache-hit
+        name: Check build cache-hit
+        if: steps.check-build-cache.outputs.cache-hit == 'true'
+        run: echo HIT!
+        
+      - id: check-temp-cache-hit
+        name: Check temp cache-hit
+        if: steps.check-temp-cache.outputs.cache-hit == 'true'
+        run: echo HIT!
         
       - id: build-amd64
         name: Build for AMD64
