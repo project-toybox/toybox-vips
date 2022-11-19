@@ -1,1 +1,35 @@
+name: Check
 
+on:
+  schedule:
+    # It runs every Monday.
+    # Note: https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule
+    - cron: '0 0 * * 1'
+
+jobs:
+  check:
+    name: Check if a new version has been released
+    runs-on: ubuntu-latest
+    steps:
+      # Note: it returns 'release(=version tag)' and 'id(=version ID)'.
+      - id: get-release-info
+        name: Get release information
+        uses: pozetroninc/github-action-get-latest-release@master
+        with:
+          owner: libvips
+          repo: libvips
+          excludes: prerelease, draft
+
+      # Note: it returns 'exists(true or false)'.
+      - id: check-duplicates
+        name: Check duplicates
+        uses: mukunku/tag-exists-action@v1.1.0
+        with:
+          tag: ${{steps.get-release-info.outputs.release}}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - id: call-build-workflow
+        name: Call the build workflow
+        if: needs.prepare.outputs.is-duplicated == 'false'
+        uses: ./.github/workflows/build.yml
