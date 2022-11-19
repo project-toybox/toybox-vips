@@ -35,8 +35,8 @@ jobs:
     name: Build libvips
     runs-on: ubuntu-latest
     env:
-      BUILD_CACHE_KEY: libvips-build
-      TEMP_CACHE_KEY: libvips-temp
+      BUILD_CACHE_KEY: libvips-build-cache
+      TEMP_CACHE_KEY: libvips-temp-cache
     steps:    
       - id: checkout
         name: Checkout
@@ -45,8 +45,8 @@ jobs:
           repository: 'libvips/build-win64-mxe'
           
       - id: prepare-envs
-        name: Prepare variables
-        run: export DEFAULT_WD=$(pwd) 
+        name: Prepare environment variables
+        run: export DEFAULT_WD=$(pwd) && echo $DEFAULT_WD
       
       - id: prepare-volumns
         name: Prepare docker volumns
@@ -78,20 +78,48 @@ jobs:
         
       - id: build-amd64
         name: Build for AMD64
-        run: ./build.sh --ref ${{needs.prepare.outputs.tag}} --tmpdir ./temp --with-hevc all x86_64 shared
+        run: ./build.sh --ref ${{needs.prepare.outputs.tag}} --tmpdir ./temp --with-hevc all x86_64 static && ls -al
       
-      - id: build-armv7
-        name: Build for ARMv7
-        run: ./build.sh --ref ${{needs.prepare.outputs.tag}} --tmpdir ./temp --with-hevc all armv7 shared
+      - id: build-aarch64
+        name: Build for AArch64(ARM64)
+        run: ./build.sh --ref ${{needs.prepare.outputs.tag}} --tmpdir ./temp --with-hevc all aarch64 static && ls -al
         
       - id: change-work-directory
         name: Change work directory
-        run: cd $(DEFAULT_WD)
+        run: cd $DEFAULT_WD
         
       - id: upload-artifacts
         name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: libvips-${{needs.prepare.outputs.tag}}
+          name: libvips-${{needs.prepare.outputs.tag}}-artifacts
           path: ./*
 
+  release:
+    needs: build
+    name: Release to GitHub
+    runs-on: ubuntu-latest
+    steps:
+      - id: download-artifacts
+        name: Download artifacts
+        
+      - id: delete-existing-release
+        name: Delete the existing release
+        if: needs.prepare.outputs.is-duplicated == 'true'
+        uses: dev-drprasad/delete-tag-and-release@v0.2.0
+        with:
+          delete_release: true
+          tag_name: ${{needs.prepare.outputs.tag}}
+          repo: project-toybox/toybox-vips
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        
+      - id: create-release
+        name: Create a release
+        uses: marvinpinto/action-automatic-releases@latest
+        with:
+          repo_token: ${{secrets.GITHUB_TOKEN}}
+          automatic_release_tag: ${{needs.prepare.outputs.tag}}
+          prerelease: false
+          title: ${{needs.prepare.outputs.tag}}
+      
