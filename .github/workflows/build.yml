@@ -34,16 +34,41 @@ jobs:
     needs: prepare
     name: Build libvips
     runs-on: ubuntu-latest
+    env:
+      BUILD_CACHE_KEY: libvips-build
+      TEMP_CACHE_KEY: libvips-temp
     steps:    
-      - id: checkout-libvips-builder
-        name: Checkout libvips builder 
+      - id: checkout
+        name: Checkout
         uses: actions/checkout@v3
         with:
           repository: 'libvips/build-win64-mxe'
+          
+      - id: prepare-envs
+        name: Prepare variables
+        run: export DEFAULT_WD=$(pwd) 
       
       - id: prepare-volumns
         name: Prepare docker volumns
         run: pwd && mkdir temp && sudo chmod 777 temp && sudo chown runner:runner temp && sudo chmod 777 build && sudo chown runner:runner build && ls -al
+        
+      - id: check-build-cache
+        name: Check build cache
+        uses: actions/cache@v3
+        with:
+          path: ./build
+          key: ${{env.BUILD_CACHE_KEY}}
+
+      - id: check-temp-cache
+        name: Check temp cache
+        uses: actions/cache@v3
+        with:
+          path: ./temp
+          key: ${{env.TEMP_CACHE_KEY}}
+          
+      - id: check-cache-hits
+        name: Check cache-hits
+        run: echo BUILD-${{steps.check-build-cache.outputs.cache-hit}}, TEMP-${{steps.check-temp-cache.outputs.cache-hit}}
         
       - id: build-amd64
         name: Build for AMD64
@@ -52,6 +77,10 @@ jobs:
       - id: build-armv7
         name: Build for ARMv7
         run: ./build.sh --ref ${{needs.prepare.outputs.tag}} --tmpdir ./temp --with-hevc all armv7 shared
+        
+      - id: change-work-directory
+        name: Change work directory
+        run: cd $(DEFAULT_WD)
         
       - id: upload-artifacts
         name: Upload artifacts
