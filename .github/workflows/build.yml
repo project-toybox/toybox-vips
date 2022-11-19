@@ -78,11 +78,11 @@ jobs:
         
       - id: build-amd64
         name: Build for AMD64
-        run: ./build.sh --ref ${{needs.prepare.outputs.tag}} --tmpdir ./temp --with-hevc all x86_64 static && ls -R
+        run: ./build.sh --ref ${{needs.prepare.outputs.tag}} --tmpdir ./temp --with-hevc all x86_64 shared && ls -R
       
       - id: build-aarch64
         name: Build for AArch64(ARM64)
-        run: ./build.sh --ref ${{needs.prepare.outputs.tag}} --tmpdir ./temp --with-hevc all aarch64 static && ls -R
+        run: ./build.sh --ref ${{needs.prepare.outputs.tag}} --tmpdir ./temp --with-hevc all aarch64 shared && ls -R
         
       - id: change-work-directory
         name: Change work directory
