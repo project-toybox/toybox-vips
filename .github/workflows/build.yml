@@ -15,7 +15,7 @@ jobs:
         uses: pozetroninc/github-action-get-latest-release@master
         with:
           owner: libvips
-          repo: libvips
+          repo: build-win64-mxe
           excludes: prerelease, draft
 
       # Note: it returns 'exists(true or false)'.
@@ -47,11 +47,15 @@ jobs:
           
       - id: prepare-and-check-vars
         name: Prepare and check variables
-        run: export DEFAULT_WD=$(pwd) && echo DEFAULT_WORKDIR - $DEFAULT_WD && echo TAG - ${{needs.prepare.outputs.tag}} && echo ID - ${{needs.prepare.outputs.id}} && echo IS_DUPLICATED - ${{needs.prepare.outputs.is-duplicated}}
+        run: export DEFAULT_WD=$(pwd) && echo DEFAULT_WORKDIR - $DEFAULT_WD && echo TAG - '${{needs.prepare.outputs.tag}}' && echo ID - '${{needs.prepare.outputs.id}}' && echo IS_DUPLICATED - '${{needs.prepare.outputs.is-duplicated}}'
       
-      - id: prepare-volumns
-        name: Prepare docker volumns
-        run: pwd && mkdir temp && sudo chmod 777 temp && sudo chown runner:runner temp && sudo chmod 777 build && sudo chown runner:runner build && ls -al
+      - id: create-temp
+        name: Create a temp directory
+        run: pwd && mkdir temp && ls -al
+      
+      - id: change-permissions-before
+        name: Change permissions
+        run: pwd && cd $DEFAULT_WD && cd .. && sudo chmod -R 777 toybox-vips && sudo chown -R runner:runner toybox-vips && cd toybox-vips && ls -al
         
       - id: check-build-cache
         name: Check build cache
@@ -79,24 +83,23 @@ jobs:
         
       - id: build-amd64
         name: Build for AMD64
-        run: ./build.sh --ref ${{needs.prepare.outputs.tag}} --tmpdir ./temp --with-hevc all x86_64 shared && ls -al
+        run: ./build.sh --tmpdir ./temp --with-hevc all x86_64 shared && ls -al
       
       - id: build-aarch64
         name: Build for AArch64(ARM64)
-        run: ./build.sh --ref ${{needs.prepare.outputs.tag}} --tmpdir ./temp --with-hevc all aarch64 shared && ls -al
+        run: ./build.sh --tmpdir ./temp --with-hevc all aarch64 shared && ls -al
         
-      - id: change-work-directory
-        name: Change work directory
-        run: cd $DEFAULT_WD
+      - id: change-permissions-after
+        name: Change permissions
+        run: pwd && cd $DEFAULT_WD && cd .. && sudo chmod -R 777 toybox-vips && sudo chown -R runner:runner toybox-vips && cd toybox-vips && ls -al
         
-#      - id: upload-artifacts
-#        name: Upload artifacts
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: libvips-${{needs.prepare.outputs.tag}}-artifacts
-#          path: |
-#            $DEFAULT_WD/build/vips-dev-w64-all-${{needs.prepare.outputs.id}}-hevc.zip
-#            $DEFAULT_WD/build/vips-dev-arm64-all-${{needs.prepare.outputs.id}}-hevc.zip
+      - id: upload-artifacts
+        name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: libvips-${{needs.prepare.outputs.tag}}-artifacts
+          path: |
+            $DEFAULT_WD/build/*.zip
 
   release:
     needs: build
@@ -133,5 +136,4 @@ jobs:
           prerelease: false
           title: ${{needs.prepare.outputs.tag}}
           files: |
-            vips-dev-w64-all-${{needs.prepare.outputs.id}}-hevc.zip
-            vips-dev-arm64-all-${{needs.prepare.outputs.id}}-hevc.zip
+            *.zip
