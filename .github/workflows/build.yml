@@ -89,14 +89,14 @@ jobs:
         name: Change work directory
         run: cd $DEFAULT_WD
         
-      - id: upload-artifacts
-        name: Upload artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: libvips-${{needs.prepare.outputs.tag}}-artifacts
-          path: |
-            $DEFAULT_WD/build/vips-dev-w64-all-${{needs.prepare.outputs.id}}-hevc.zip
-            $DEFAULT_WD/build/vips-dev-arm64-all-${{needs.prepare.outputs.id}}-hevc.zip
+#      - id: upload-artifacts
+#        name: Upload artifacts
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: libvips-${{needs.prepare.outputs.tag}}-artifacts
+#          path: |
+#            $DEFAULT_WD/build/vips-dev-w64-all-${{needs.prepare.outputs.id}}-hevc.zip
+#            $DEFAULT_WD/build/vips-dev-arm64-all-${{needs.prepare.outputs.id}}-hevc.zip
 
   release:
     needs: build
