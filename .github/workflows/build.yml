@@ -93,7 +93,7 @@ jobs:
         name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: libvips-${{needs.prepare.outputs.tag}}-artifacts
+          name: libvips-artifacts
           path: |
             /home/runner/work/toybox-vips/toybox-vips/build/*.zip
 
@@ -106,7 +106,7 @@ jobs:
         name: Download artifacts
         uses: actions/download-artifact@v3
         with:
-          name: libvips-${{needs.prepare.outputs.tag}}-artifacts
+          name: libvips-artifacts
           
       - id: display-file-structure
         name: Display file structure
