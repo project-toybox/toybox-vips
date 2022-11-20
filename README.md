@@ -14,4 +14,4 @@
 </p>
 
 ## License
-The contents are freely available under the [MIT License](http://opensource.org/licenses/MIT). However, prebuilt binaries are distributed by [GPL-3.0](https://opensource.org/licenses/GPL-3.0).
+The contents are freely available under the [MIT License](http://opensource.org/licenses/MIT). However, prebuilt binaries are distributed by [GPL-2.0](https://opensource.org/licenses/GPL-2.0).
