@@ -4,7 +4,7 @@ on:
   schedule:
     # It runs every Monday.
     # Note: https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule
-    - cron: '0 0 * * 1'
+    - cron: '0 0 * * *'
 
 jobs:
   check:
