@@ -55,7 +55,7 @@ jobs:
       
       - id: change-permissions-before
         name: Change permissions
-        run: pwd && cd $DEFAULT_WD && cd .. && pwd && sudo chmod -R 777 ./toybox-vips && sudo chown -R runner:runner ./toybox-vips && cd ./toybox-vips && ls -al
+        run: pwd && sudo chmod -R 777 $DEFAULT_WD && sudo chown -R runner:runner $DEFAULT_WD && ls -al
         
       - id: check-build-cache
         name: Check build cache
