@@ -14,5 +14,3 @@
 
 ## License
 The contents are freely available under the [MIT License](http://opensource.org/licenses/MIT). However, prebuilt binaries are distributed by [GPL-3.0](https://opensource.org/licenses/GPL-3.0).
-
-The licenses of third-party libraries can be found [here](https://github.com/project-toybox/toybox-image-conversion-server/blob/main/docs/THIRD_PARTY_NOTICES.md).
