@@ -44,12 +44,8 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: 'libvips/build-win64-mxe'
-          
-      - id: prepare-and-check-vars
-        name: Prepare and check variables
-        run: export DEFAULT_WD=$(pwd) && echo DEFAULT_WORKDIR - $DEFAULT_WD && echo TAG - '${{needs.prepare.outputs.tag}}' && echo ID - '${{needs.prepare.outputs.id}}' && echo IS_DUPLICATED - '${{needs.prepare.outputs.is-duplicated}}'
-      
-      - id: create-temp
+
+      - id: create-temp-dir
         name: Create a temp directory
         run: pwd && mkdir temp && ls -al
       
@@ -91,7 +87,7 @@ jobs:
         
       - id: change-permissions-after
         name: Change permissions
-        run: pwd && cd $DEFAULT_WD && cd .. && sudo chmod -R 777 toybox-vips && sudo chown -R runner:runner toybox-vips && cd toybox-vips && ls -al
+        run: pwd && sudo chmod -R 777 /home/runner/work/toybox-vips/toybox-vips && sudo chown -R runner:runner /home/runner/work/toybox-vips/toybox-vips && ls -al
         
       - id: upload-artifacts
         name: Upload artifacts
@@ -99,7 +95,7 @@ jobs:
         with:
           name: libvips-${{needs.prepare.outputs.tag}}-artifacts
           path: |
-            $DEFAULT_WD/build/*.zip
+            /home/runner/work/toybox-vips/toybox-vips/build/*.zip
 
   release:
     needs: build
