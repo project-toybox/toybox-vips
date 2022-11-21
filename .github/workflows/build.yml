@@ -98,7 +98,7 @@ jobs:
         run: rm /home/runner/work/toybox-vips/toybox-vips/build/*.zip
 
   release:
-    needs: build
+    needs: [prepare, build]
     name: Release to GitHub
     runs-on: ubuntu-latest
     permissions:
