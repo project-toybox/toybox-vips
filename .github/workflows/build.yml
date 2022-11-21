@@ -76,10 +76,18 @@ jobs:
       - id: change-permissions
         name: Change permissions
         run: pwd && sudo chmod -R 777 /home/runner/work/toybox-vips/toybox-vips && sudo chown -R runner:runner /home/runner/work/toybox-vips/toybox-vips && ls -al
-        
+      
+      - id: build-i686
+        name: Build for i686(x86)
+        run: ./build.sh --tmpdir ./temp --with-hevc all i686 shared && ls -al
+      
       - id: build-amd64
-        name: Build for AMD64
+        name: Build for AMD64(x64)
         run: ./build.sh --tmpdir ./temp --with-hevc all x86_64 shared && ls -al
+        
+      - id: build-armv7
+        name: Build for ARMv7(ARM32)
+        run: ./build.sh --tmpdir ./temp --with-hevc all armv7 shared && ls -al
       
       - id: build-aarch64
         name: Build for AArch64(ARM64)
