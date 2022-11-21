@@ -7,8 +7,8 @@ on:
     - cron: '0 0 * * *'
 
 jobs:
-  check:
-    name: Check if a new version has been released
+  prepare:
+    name: Prepare to check
     runs-on: ubuntu-latest
     steps:
       # Note: it returns 'release(=version tag)' and 'id(=version ID)'.
@@ -17,7 +17,7 @@ jobs:
         uses: pozetroninc/github-action-get-latest-release@master
         with:
           owner: libvips
-          repo: libvips
+          repo: build-win64-mxe
           excludes: prerelease, draft
 
       # Note: it returns 'exists(true or false)'.
@@ -28,8 +28,16 @@ jobs:
           tag: ${{steps.get-release-info.outputs.release}}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
+    outputs:
+      tag: ${{steps.get-release-info.outputs.release}}
+      id: ${{steps.get-release-info.outputs.id}}
+      is-duplicated: ${{steps.check-duplicates.exists}}
+      
+  call:
+    name: Call workflows
+    runs-on: ubuntu-latest
+    if: needs.prepare.outputs.is-duplicated == 'false'
+    steps:        
       - id: call-build-workflow
-        name: Call the build workflow
-        if: needs.prepare.outputs.is-duplicated == 'false'
+        name: Call build workflow
         uses: ./.github/workflows/build.yml
