@@ -65,12 +65,12 @@ jobs:
           
       - id: check-build-cache-hit
         name: Check build cache-hit
-        if: steps.check-build-cache.outputs.cache-hit == 'true'
+        if: steps.check-build-cache.outputs.cache-hit == true
         run: echo HIT!
         
       - id: check-temp-cache-hit
         name: Check temp cache-hit
-        if: steps.check-temp-cache.outputs.cache-hit == 'true'
+        if: steps.check-temp-cache.outputs.cache-hit == true
         run: echo HIT!
 
       - id: change-permissions
@@ -89,7 +89,7 @@ jobs:
         name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: libvips-artifacts
+          name: libvips-build-outputs
           path: |
             /home/runner/work/toybox-vips/toybox-vips/build/*.zip
 
@@ -101,20 +101,12 @@ jobs:
     needs: build
     name: Release to GitHub
     runs-on: ubuntu-latest
-    steps:
-      - id: download-artifacts
-        name: Download artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: libvips-artifacts
-          
-      - id: display-file-structure
-        name: Display file structure
-        run: ls -R
-        
+    permissions:
+      contents: write
+    steps:        
       - id: delete-existing-release
         name: Delete the existing release
-        if: needs.prepare.outputs.is-duplicated == 'true'
+        if: needs.prepare.outputs.is-duplicated == true
         uses: dev-drprasad/delete-tag-and-release@v0.2.0
         with:
           delete_release: true
@@ -125,11 +117,8 @@ jobs:
         
       - id: create-release
         name: Create a release
-        uses: marvinpinto/action-automatic-releases@latest
+        uses: ncipollo/release-action@v1
         with:
-          repo_token: ${{secrets.GITHUB_TOKEN}}
-          automatic_release_tag: ${{needs.prepare.outputs.tag}}
-          prerelease: false
-          title: ${{needs.prepare.outputs.tag}}
-          files: |
-            *.zip
+          name: ${{needs.prepare.outputs.tag}}
+          tag: ${{needs.prepare.outputs.tag}}
+          artifacts: libvips-build-outputs
