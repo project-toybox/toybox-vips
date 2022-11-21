@@ -38,8 +38,12 @@ jobs:
     needs: check-releases
     name: Call workflows
     runs-on: ubuntu-latest
-    if: needs.check-releases.outputs.is-duplicated == false
-    steps:        
+    if: needs.check-releases.outputs.is-duplicated == true
+    steps:
+      - id: checkout
+        name: Checkout
+        uses: actions/checkout@v3
+    
       - id: call-build-workflow
         name: Call build workflow
         uses: ./.github/workflows/build.yml
