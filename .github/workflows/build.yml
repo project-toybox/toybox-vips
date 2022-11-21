@@ -103,7 +103,17 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    steps:        
+    steps:
+      - id: download-artifacts
+        name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: libvips-build-outputs
+          
+      - id: display-file-structure
+        name: Display file structure
+        run: ls -R
+        
       - id: delete-existing-release
         name: Delete the existing release
         if: needs.prepare.outputs.is-duplicated == true
@@ -117,9 +127,11 @@ jobs:
         
       - id: create-release
         name: Create a release
-        uses: ncipollo/release-action@v1
+        uses: softprops/action-gh-release@v1
         with:
           name: ${{needs.prepare.outputs.tag}}
-          commit: main
-          tag: ${{needs.prepare.outputs.tag}}
-          artifacts: libvips-build-outputs
+          tag_name: ${{needs.prepare.outputs.tag}}
+          draft: false
+          prerelease: false
+          files: |
+            *.zip
