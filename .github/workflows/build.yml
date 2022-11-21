@@ -107,8 +107,6 @@ jobs:
       - id: checkout
         name: Checkout
         uses: actions/checkout@v2
-        
-      - run: echo ${{needs.prepare.outputs.tag}}
       
       - id: delete-existing-release
         name: Delete the existing release
