@@ -1,7 +1,7 @@
 <p align="right">
-<img alt="GitHub" src="https://img.shields.io/github/license/project-toybox/toybox-vips">
 <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/project-toybox/toybox-vips/Build">
 <img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/project-toybox/toybox-vips">
+<img alt="GitHub" src="https://img.shields.io/github/license/project-toybox/toybox-vips">
 </p>
 
 <p align="center">
