@@ -54,14 +54,18 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ./build
-          key: ${{env.BUILD_CACHE_KEY}}
+          key: libvips-build-cache-${{needs.prepare.outputs.tag}}
+          restore-keys: |
+            libvips-build-cache
 
       - id: check-temp-cache
         name: Check temp cache
         uses: actions/cache@v3
         with:
           path: ./temp
-          key: ${{env.TEMP_CACHE_KEY}}
+          key: libvips-temp-cache-${{needs.prepare.outputs.tag}}
+          restore-keys: |
+            libvips-temp-cache
           
       - id: check-build-cache-hit
         name: Check build cache-hit
