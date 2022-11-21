@@ -48,10 +48,6 @@ jobs:
       - id: create-temp-dir
         name: Create a temp directory
         run: pwd && mkdir temp && ls -al
-      
-      - id: change-permissions-before
-        name: Change permissions
-        run: pwd && sudo chmod -R 777 /home/runner/work/toybox-vips/toybox-vips && sudo chown -R runner:runner /home/runner/work/toybox-vips/toybox-vips && ls -al
         
       - id: check-build-cache
         name: Check build cache
@@ -76,6 +72,10 @@ jobs:
         name: Check temp cache-hit
         if: steps.check-temp-cache.outputs.cache-hit == 'true'
         run: echo HIT!
+
+      - id: change-permissions
+        name: Change permissions
+        run: pwd && sudo chmod -R 777 /home/runner/work/toybox-vips/toybox-vips && sudo chown -R runner:runner /home/runner/work/toybox-vips/toybox-vips && ls -al
         
       - id: build-amd64
         name: Build for AMD64
@@ -85,10 +85,6 @@ jobs:
         name: Build for AArch64(ARM64)
         run: ./build.sh --tmpdir ./temp --with-hevc all aarch64 shared && ls -al
         
-      - id: change-permissions-after
-        name: Change permissions
-        run: pwd && sudo chmod -R 777 /home/runner/work/toybox-vips/toybox-vips && sudo chown -R runner:runner /home/runner/work/toybox-vips/toybox-vips && ls -al
-        
       - id: upload-artifacts
         name: Upload artifacts
         uses: actions/upload-artifact@v3
@@ -96,6 +92,10 @@ jobs:
           name: libvips-artifacts
           path: |
             /home/runner/work/toybox-vips/toybox-vips/build/*.zip
+
+      - id: remove-build-outputs
+        name: Remove build outputs
+        run: rm /home/runner/work/toybox-vips/toybox-vips/build/*.zip
 
   release:
     needs: build
