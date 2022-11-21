@@ -7,8 +7,8 @@ on:
     - cron: '0 0 * * *'
 
 jobs:
-  prepare:
-    name: Prepare to check
+  check-releases:
+    name: Check releases
     runs-on: ubuntu-latest
     steps:
       # Note: it returns 'release(=version tag)' and 'id(=version ID)'.
@@ -34,6 +34,7 @@ jobs:
       is-duplicated: ${{steps.check-duplicates.exists}}
       
   call:
+    needs: check-releases
     name: Call workflows
     runs-on: ubuntu-latest
     if: needs.prepare.outputs.is-duplicated == 'false'
