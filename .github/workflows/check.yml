@@ -32,7 +32,7 @@ jobs:
     outputs:
       tag: ${{steps.get-release-info.outputs.release}}
       id: ${{steps.get-release-info.outputs.id}}
-      is-duplicated: ${{steps.check-duplicates.exists}}
+      is-duplicated: ${{steps.check-duplicates.outputs.exists}}
       
   call-workflows:
     needs: check-releases
