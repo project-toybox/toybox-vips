@@ -38,7 +38,7 @@ jobs:
     needs: check-releases
     name: Call workflows
     runs-on: ubuntu-latest
-    if: needs.check-releases.outputs.is-duplicated == 'false'
+    if: needs.check-releases.outputs.is-duplicated == 'true'
     steps:        
       - id: call-build-workflow
         name: Call build workflow
