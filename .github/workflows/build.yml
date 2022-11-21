@@ -104,16 +104,10 @@ jobs:
     permissions:
       contents: write
     steps:
-      - id: download-artifacts
-        name: Download artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: libvips-build-outputs
-          
-      - id: display-file-structure
-        name: Display file structure
-        run: ls -R
-        
+      - id: checkout
+        name: Checkout
+        uses: actions/checkout@v2
+      
       - id: delete-existing-release
         name: Delete the existing release
         if: needs.prepare.outputs.is-duplicated == true
@@ -124,6 +118,19 @@ jobs:
           repo: project-toybox/toybox-vips
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      
+      - id: create-tag
+        name: Create a tag
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          custom_tag: ${{needs.prepare.outputs.tag}}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+    
+      - id: download-artifacts
+        name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: libvips-build-outputs
         
       - id: create-release
         name: Create a release
