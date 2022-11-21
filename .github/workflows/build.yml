@@ -65,12 +65,12 @@ jobs:
           
       - id: check-build-cache-hit
         name: Check build cache-hit
-        if: steps.check-build-cache.outputs.cache-hit == true
+        if: steps.check-build-cache.outputs.cache-hit == 'true'
         run: echo HIT!
         
       - id: check-temp-cache-hit
         name: Check temp cache-hit
-        if: steps.check-temp-cache.outputs.cache-hit == true
+        if: steps.check-temp-cache.outputs.cache-hit == 'true'
         run: echo HIT!
 
       - id: change-permissions
