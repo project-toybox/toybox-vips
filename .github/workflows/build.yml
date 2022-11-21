@@ -120,5 +120,6 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           name: ${{needs.prepare.outputs.tag}}
+          commit: main
           tag: ${{needs.prepare.outputs.tag}}
           artifacts: libvips-build-outputs
