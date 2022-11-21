@@ -34,11 +34,11 @@ jobs:
       id: ${{steps.get-release-info.outputs.id}}
       is-duplicated: ${{steps.check-duplicates.exists}}
       
-  call:
+  call-workflows:
     needs: check-releases
     name: Call workflows
     runs-on: ubuntu-latest
-    if: needs.prepare.outputs.is-duplicated == 'false'
+    if: needs.check-releases.outputs.is-duplicated == 'false'
     steps:        
       - id: call-build-workflow
         name: Call build workflow
