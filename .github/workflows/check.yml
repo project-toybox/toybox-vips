@@ -37,5 +37,5 @@ jobs:
   call-workflows:
     needs: check-releases
     name: Call workflows
-    if: needs.check-releases.outputs.is-duplicated == false
+    if: needs.check-releases.outputs.is-duplicated == 'false'
     uses: ./.github/workflows/build.yml
