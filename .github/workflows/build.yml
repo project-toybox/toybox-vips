@@ -31,13 +31,10 @@ jobs:
       id: ${{steps.get-release-info.outputs.id}}
       is-duplicated: ${{steps.check-duplicates.exists}}
   
-  build:
+  build-x86-family:
     needs: prepare
-    name: Build libvips
+    name: Build for x86 family
     runs-on: ubuntu-latest
-    env:
-      BUILD_CACHE_KEY: libvips-build-cache
-      TEMP_CACHE_KEY: libvips-temp-cache
     steps:    
       - id: checkout
         name: Checkout
@@ -54,8 +51,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ./build
-          key: libvips-build-cache-${{needs.prepare.outputs.tag}}
+          key: libvips-build-cache-x86-${{needs.prepare.outputs.tag}}
           restore-keys: |
+            libvips-build-cache-x86
             libvips-build-cache
 
       - id: check-temp-cache
@@ -63,8 +61,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ./temp
-          key: libvips-temp-cache-${{needs.prepare.outputs.tag}}
+          key: libvips-temp-cache-x86-${{needs.prepare.outputs.tag}}
           restore-keys: |
+            libvips-temp-cache-x86
             libvips-temp-cache
           
       - id: check-build-cache-hit
@@ -82,12 +81,73 @@ jobs:
         run: pwd && sudo chmod -R 777 /home/runner/work/toybox-vips/toybox-vips && sudo chown -R runner:runner /home/runner/work/toybox-vips/toybox-vips && ls -al
       
       - id: build-i686
-        name: Build for i686(x86)
+        name: Build for i686(x86-32)
         run: ./build.sh --tmpdir ./temp --with-hevc all i686 shared && ls -al
       
       - id: build-amd64
-        name: Build for AMD64(x64)
+        name: Build for AMD64(x86-64)
         run: ./build.sh --tmpdir ./temp --with-hevc all x86_64 shared && ls -al
+        
+      - id: upload-build-outputs
+        name: Upload build outputs
+        uses: actions/upload-artifact@v3
+        with:
+          name: libvips-x86-build-outputs
+          path: |
+            /home/runner/work/toybox-vips/toybox-vips/build/*.zip
+
+      - id: remove-build-outputs
+        name: Remove build outputs
+        run: rm /home/runner/work/toybox-vips/toybox-vips/build/*.zip
+        
+  build-arm-family:
+    needs: prepare
+    name: Build for ARM family
+    runs-on: ubuntu-latest
+    steps:    
+      - id: checkout
+        name: Checkout
+        uses: actions/checkout@v3
+        with:
+          repository: 'libvips/build-win64-mxe'
+
+      - id: create-temp-dir
+        name: Create a temp directory
+        run: pwd && mkdir temp && ls -al
+        
+      - id: check-build-cache
+        name: Check build cache
+        uses: actions/cache@v3
+        with:
+          path: ./build
+          key: libvips-build-cache-arm-${{needs.prepare.outputs.tag}}
+          restore-keys: |
+            libvips-build-cache-arm
+            libvips-build-cache
+
+      - id: check-temp-cache
+        name: Check temp cache
+        uses: actions/cache@v3
+        with:
+          path: ./temp
+          key: libvips-temp-cache-arm-${{needs.prepare.outputs.tag}}
+          restore-keys: |
+            libvips-temp-cache-arm
+            libvips-temp-cache
+          
+      - id: check-build-cache-hit
+        name: Check build cache-hit
+        if: steps.check-build-cache.outputs.cache-hit == 'true'
+        run: echo HIT!
+        
+      - id: check-temp-cache-hit
+        name: Check temp cache-hit
+        if: steps.check-temp-cache.outputs.cache-hit == 'true'
+        run: echo HIT!
+
+      - id: change-permissions
+        name: Change permissions
+        run: pwd && sudo chmod -R 777 /home/runner/work/toybox-vips/toybox-vips && sudo chown -R runner:runner /home/runner/work/toybox-vips/toybox-vips && ls -al
         
       - id: build-armv7
         name: Build for ARMv7(ARM32)
@@ -97,11 +157,11 @@ jobs:
         name: Build for AArch64(ARM64)
         run: ./build.sh --tmpdir ./temp --with-hevc all aarch64 shared && ls -al
         
-      - id: upload-artifacts
-        name: Upload artifacts
+      - id: upload-build-outputs
+        name: Upload build outputs
         uses: actions/upload-artifact@v3
         with:
-          name: libvips-build-outputs
+          name: libvips-arm-build-outputs
           path: |
             /home/runner/work/toybox-vips/toybox-vips/build/*.zip
 
@@ -110,7 +170,7 @@ jobs:
         run: rm /home/runner/work/toybox-vips/toybox-vips/build/*.zip
 
   release:
-    needs: [prepare, build]
+    needs: [prepare, build-x86-family, build-arm-family]
     name: Release to GitHub
     runs-on: ubuntu-latest
     permissions:
@@ -131,11 +191,17 @@ jobs:
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
     
-      - id: download-artifacts
-        name: Download artifacts
+      - id: download-x86-build-outputs
+        name: Download x86 build outputs
         uses: actions/download-artifact@v3
         with:
-          name: libvips-build-outputs
+          name: libvips-x86-build-outputs
+          
+      - id: download-arm-build-outputs
+        name: Download ARM build outputs
+        uses: actions/download-artifact@v3
+        with:
+          name: libvips-arm-build-outputs
       
       - id: create-tag
         name: Create a tag
