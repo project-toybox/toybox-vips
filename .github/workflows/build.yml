@@ -76,7 +76,7 @@ jobs:
         if: steps.check-temp-cache.outputs.cache-hit == 'true'
         run: echo HIT!
 
-      - id: change-permissions
+      - id: change-permissions-before-build
         name: Change permissions
         run: pwd && sudo chmod -R 777 /home/runner/work/toybox-vips/toybox-vips && sudo chown -R runner:runner /home/runner/work/toybox-vips/toybox-vips && ls -al
       
@@ -84,8 +84,12 @@ jobs:
         name: Build
         run: ./build.sh --tmpdir ./temp --with-hevc all x86_64 shared && ls -al
         
+      - id: change-permissions-after-build
+        name: Change permissions
+        run: pwd && sudo chmod -R 777 /home/runner/work/toybox-vips/toybox-vips && sudo chown -R runner:runner /home/runner/work/toybox-vips/toybox-vips && ls -al
+        
       - id: upload-build-outputs
-        name: Upload build outputs
+        name: Upload build outputs 
         uses: actions/upload-artifact@v3
         with:
           name: libvips-x64-build-outputs
@@ -141,13 +145,17 @@ jobs:
         if: steps.check-temp-cache.outputs.cache-hit == 'true'
         run: echo HIT!
 
-      - id: change-permissions
+      - id: change-permissions-before-build
         name: Change permissions
         run: pwd && sudo chmod -R 777 /home/runner/work/toybox-vips/toybox-vips && sudo chown -R runner:runner /home/runner/work/toybox-vips/toybox-vips && ls -al
       
       - id: build
         name: Build
         run: ./build.sh --tmpdir ./temp --with-hevc all aarch64 shared && ls -al
+        
+      - id: change-permissions-after-build
+        name: Change permissions
+        run: pwd && sudo chmod -R 777 /home/runner/work/toybox-vips/toybox-vips && sudo chown -R runner:runner /home/runner/work/toybox-vips/toybox-vips && ls -al
         
       - id: upload-build-outputs
         name: Upload build outputs
