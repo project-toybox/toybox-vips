@@ -1,7 +1,7 @@
 <p align="right">
-<img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/project-toybox/toybox-vips/Build">
-<img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/project-toybox/toybox-vips">
-<img alt="GitHub" src="https://img.shields.io/github/license/project-toybox/toybox-vips">
+<a target="_blank" href="https://github.com/project-toybox/toybox-vips/actions"><img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/project-toybox/toybox-vips/Build"></a>
+<a target="_blank" href="https://github.com/project-toybox/toybox-vips/releases/latest"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/project-toybox/toybox-vips"></a>
+<a target="_blank" href="https://github.com/project-toybox/toybox-vips/blob/main/LICENSE"><img alt="GitHub" src="https://img.shields.io/github/license/project-toybox/toybox-vips"></a>
 </p>
 
 <p align="center">
