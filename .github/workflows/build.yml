@@ -182,7 +182,7 @@ jobs:
       
       - id: delete-existing-release
         name: Delete the existing release
-        if: needs.prepare.outputs.is-duplicated == true
+        if: needs.prepare.outputs.is-duplicated == 'true'
         uses: dev-drprasad/delete-tag-and-release@v0.2.0
         with:
           delete_release: true
