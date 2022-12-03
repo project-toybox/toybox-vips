@@ -9,7 +9,7 @@
         <img src="https://raw.githubusercontent.com/project-toybox/toybox-assets/main/images/toybox-icon.png" width="50" height="50">
         <p>Toybox VIPS</p>
     </h1>
-    <p align="center">Prebuilt libvips binaries for Toybox<br>It provides a customized version of libvips supporting HEIF and JXL.</p>
+    <p align="center">Prebuilt libvips binaries for Toybox Image Converter<br>It provides a customized version of libvips supporting HEIF and JXL.</p>
     <br>
 </p>
 
