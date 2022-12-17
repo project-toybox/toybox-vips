@@ -14,9 +14,9 @@
 ## Introduction
 Toybox VIPS is a customized version of libvips supporting the HEIF and the JPEG XL. Build operations(e.g., version checking, compiling) are couducted automatically by GitHub Workflow.
 
+## License
 This project is using such open-source softwares.
  * [libvips/libvips](https://github.com/libvips/libvips)
  * [libvips/build-win64-mxe](https://github.com/libvips/build-win64-mxe)
 
-## License
 The contents are freely available under the [MIT License](http://opensource.org/licenses/MIT). However, prebuilt binaries are distributed by [GPL-2.0](https://opensource.org/licenses/GPL-2.0).
