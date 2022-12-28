@@ -12,14 +12,14 @@ jobs:
     name: Check releases
     runs-on: ubuntu-latest
     steps:
-      # Note: it returns 'release(=version tag)' and 'id(=version ID)'.
+      # Note: it returns 'release(=version tag)' and 'release_id(=version ID)'.
       - id: get-release-info
         name: Get release information
-        uses: pozetroninc/github-action-get-latest-release@master
-        with:
-          owner: libvips
-          repo: build-win64-mxe
-          excludes: prerelease, draft
+        uses: rez0n/actions-github-release@main
+        env:
+          repository: "libvips/build-win64-mxe"
+          type: "stable"
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       # Note: it returns 'exists(true or false)'.
       - id: check-duplicates
@@ -31,7 +31,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     outputs:
       tag: ${{steps.get-release-info.outputs.release}}
-      id: ${{steps.get-release-info.outputs.id}}
+      id: ${{steps.get-release-info.outputs.release_id}}
       is-duplicated: ${{steps.check-duplicates.outputs.exists}}
       
   call-workflows:
